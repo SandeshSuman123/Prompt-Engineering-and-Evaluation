@@ -1,0 +1,38 @@
+[
+    {
+        "task": "Write a Python script that creates an AWS S3 bucket.",
+        "type": "python"
+    },
+    {
+        "task": "Generate JSON for an IAM policy that allows full access to DynamoDB.",
+        "type": "json"
+    },
+    {
+        "task": "Create a regular expression that validates an AWS Access Key ID.",
+        "type": "regex"
+    },
+    {
+        "task": "Write a Python function that lists all AWS Regions.",
+        "type": "python"
+    },
+    {
+        "task": "Generate JSON for an SQS queue that triggers a Lambda function.",
+        "type": "json"
+    },
+    {
+        "task": "Create a regular expression that matches an AWS IAM role ARN.",
+        "type": "regex"
+    },
+    {
+        "task": "Write a Python script that uploads a file to S3 using the AWS SDK.",
+        "type": "python"
+    },
+    {
+        "task": "Generate JSON for a CloudWatch Logs metric filter that detects errors.",
+        "type": "json"
+    },
+    {
+        "task": "Create a regular expression that extracts an AWS CloudFormation stack name from a URL.",
+        "type": "regex"
+    }
+]
