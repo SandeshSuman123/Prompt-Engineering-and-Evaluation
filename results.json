@@ -1,0 +1,101 @@
+[
+  {
+    "output": "\nimport boto3\nfrom botocore.exceptions import ClientError\n\ndef create_s3_bucket(bucket_name, region=None):\n    try:\n        if region:\n            s3_client = boto3.client('s3', region_name=region)\n            location = {'LocationConstraint': region}\n            s3_client.create_bucket(Bucket=bucket_name,\n                                    CreateBucketConfiguration=location)\n        else:\n            s3_client = boto3.client('s3')\n            s3_client.create_bucket(Bucket=bucket_name)\n    except ClientError as e:\n        print(e)\n\ncreate_s3_bucket('my-new-bucket', 'us-east-1')\n",
+    "test_case": {
+      "task": "Write a Python script that creates an AWS S3 bucket.",
+      "type": "python"
+    },
+    "model_score": 8,
+    "model_reasoning": "The model's response correctly creates an AWS S3 bucket using the boto3 library and handles potential errors, staying focused on the task, but lacks input validation and error handling for cases like bucket name availability or region validity.",
+    "syntax_score": 10,
+    "score": 9.0
+  },
+  {
+    "output": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"FullAccessToDynamoDB\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"dynamodb:*\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+    "test_case": {
+      "task": "Generate JSON for an IAM policy that allows full access to DynamoDB.",
+      "type": "json"
+    },
+    "model_score": 10,
+    "model_reasoning": "The model's response is a valid IAM policy JSON that grants full access to DynamoDB, staying focused on the specific ask and including all necessary elements.",
+    "syntax_score": 10,
+    "score": 10.0
+  },
+  {
+    "output": "\nimport re\n\ndef validate_aws_access_key_id(key_id):\n    pattern = r'^[A-Z0-9]{20}$'\n    if re.match(pattern, key_id):\n        return True\n    else:\n        return False\n\nprint(validate_aws_access_key_id('AKIAIOSFODNN7EXAMPLE')) \n",
+    "test_case": {
+      "task": "Create a regular expression that validates an AWS Access Key ID.",
+      "type": "regex"
+    },
+    "model_score": 8,
+    "model_reasoning": "The model's response is mostly correct, but it does not account for the fact that AWS Access Key IDs are case-sensitive and typically start with 'AKIA', the provided regex pattern is also correct but the function can be simplified, and it does not handle any potential exceptions.",
+    "syntax_score": 10,
+    "score": 9.0
+  },
+  {
+    "output": "\nimport boto3\n\ndef list_aws_regions():\n    ec2 = boto3.client('ec2')\n    response = ec2.describe_regions()\n    regions = [region['RegionName'] for region in response['Regions']]\n    return regions\n\nprint(list_aws_regions())\n",
+    "test_case": {
+      "task": "Write a Python function that lists all AWS Regions.",
+      "type": "python"
+    },
+    "model_score": 10,
+    "model_reasoning": "The model's response correctly solves the task by utilizing the boto3 library to fetch and return a list of AWS regions, staying focused on the specific ask without any unnecessary information.",
+    "syntax_score": 10,
+    "score": 10.0
+  },
+  {
+    "output": "\n{\n  \"AWSTemplateFormatVersion\": \"2010-09-09\",\n  \"Resources\": {\n    \"SQSQueue\": {\n      \"Type\": \"AWS::SQS::Queue\",\n      \"Properties\": {\n        \"QueueName\": \"MySQSQueue\",\n        \"VisibilityTimeout\": 300\n      }\n    },\n    \"LambdaFunction\": {\n      \"Type\": \"AWS::Lambda::Function\",\n      \"Properties\": {\n        \"FunctionName\": \"MyLambdaFunction\",\n        \"Runtime\": \"nodejs14.x\",\n        \"Handler\": \"index.handler\",\n        \"Role\": \"arn:aws:iam::123456789012:role/LambdaExecutionRole\",\n        \"Code\": {\n          \"S3Bucket\": \"my-lambda-code-bucket\",\n          \"S3ObjectKey\": \"lambda-code.zip\"\n        }\n      }\n    },\n    \"LambdaExecutionRole\": {\n      \"Type\": \"AWS::IAM::Role\",\n      \"Properties\": {\n        \"AssumeRolePolicyDocument\": {\n          \"Version\": \"2012-10-17\",\n          \"Statement\": [\n            {\n              \"Effect\": \"Allow\",\n              \"Principal\": {\n                \"Service\": \"lambda.amazonaws.com\"\n              },\n              \"Action\": \"sts:AssumeRole\"\n            }\n          ]\n        },\n        \"Policies\": [\n          {\n            \"PolicyName\": \"ExecutionRolePolicy\",\n            \"PolicyDocument\": {\n              \"Version\": \"2012-10-17\",\n              \"Statement\": [\n                {\n                  \"Effect\": \"Allow\",\n                  \"Action\": \"logs:CreateLogGroup\",\n                  \"Resource\": \"arn:aws:logs:*:*:*\"\n                },\n                {\n                  \"Effect\": \"Allow\",\n                  \"Action\": [\n                    \"logs:CreateLogStream\",\n                    \"logs:PutLogEvents\"\n                  ],\n                  \"Resource\": \"arn:aws:logs:*:*:*\"\n                }\n              ]\n            }\n          }\n        ]\n      }\n    },\n    \"EventSourceMapping\": {\n      \"Type\": \"AWS::Lambda::EventSourceMapping\",\n      \"Properties\": {\n        \"EventSourceArn\": {\n          \"Fn::GetAtt\": \"SQSQueue.Arn\"\n        },\n        \"FunctionName\": {\n          \"Ref\": \"LambdaFunction\"\n        },\n        \"BatchSize\": 10,\n        \"Enabled\": true\n      }\n    }\n  }\n}\n",
+    "test_case": {
+      "task": "Generate JSON for an SQS queue that triggers a Lambda function.",
+      "type": "json"
+    },
+    "model_score": 9,
+    "model_reasoning": "The response correctly generates JSON for an SQS queue that triggers a Lambda function, staying focused on AWS and including all necessary components, but it could be improved by including more detailed error handling and permissions.",
+    "syntax_score": 10,
+    "score": 9.5
+  },
+  {
+    "output": "arn:aws:iam::\\d{12}:role\\/[a-zA-Z0-9+=,.@-]+",
+    "test_case": {
+      "task": "Create a regular expression that matches an AWS IAM role ARN.",
+      "type": "regex"
+    },
+    "model_score": 8,
+    "model_reasoning": "The model's response is mostly correct, but it does not account for the possibility of the role name starting with a forward slash, and the character class can be improved for better accuracy, however it stays focused on AWS and is mostly complete.",
+    "syntax_score": 10,
+    "score": 9.0
+  },
+  {
+    "output": "\nimport boto3\nfrom botocore.exceptions import NoCredentialsError\n\ndef upload_to_s3(local_file, bucket, s3_file):\n    s3 = boto3.client('s3')\n\n    try:\n        s3.upload_file(local_file, bucket, s3_file)\n        print(\"Upload Successful\")\n        return True\n    except FileNotFoundError:\n        print(\"The file was not found\")\n        return False\n    except NoCredentialsError:\n        print(\"Credentials not available\")\n        return False\n\nlocal_file = 'test.txt'\nbucket_name = 'my-bucket'\ns3_file_name = 'test.txt'\n\nupload_to_s3(local_file, bucket_name, s3_file_name)\n",
+    "test_case": {
+      "task": "Write a Python script that uploads a file to S3 using the AWS SDK.",
+      "type": "python"
+    },
+    "model_score": 8,
+    "model_reasoning": "The model's response is mostly correct, but it lacks error handling for other potential exceptions that may occur during the upload process, and it does not check if the bucket exists before attempting to upload the file.",
+    "syntax_score": 10,
+    "score": 9.0
+  },
+  {
+    "output": "\n{\n  \"FilterName\": \"ErrorMetricFilter\",\n  \"FilterPattern\": \"[ERROR]\",\n  \"MetricTransformations\": [\n    {\n      \"MetricNamespace\": \"MyApp/Errors\",\n      \"MetricName\": \"ErrorCount\",\n      \"MetricValue\": \"1\"\n    }\n  ]\n}\n",
+    "test_case": {
+      "task": "Generate JSON for a CloudWatch Logs metric filter that detects errors.",
+      "type": "json"
+    },
+    "model_score": 10,
+    "model_reasoning": "The model's response correctly defines a CloudWatch Logs metric filter that detects errors and stays focused on the specific ask, with no important details missing, thus scoring high on correctness, relevance, and completeness.",
+    "syntax_score": 10,
+    "score": 10.0
+  },
+  {
+    "output": "\nimport re\n\ndef extract_stack_name(url):\n    pattern = r\"stacks/(?P<stack_name>[^/]+)\"\n    match = re.search(pattern, url)\n    if match:\n        return match.group(\"stack_name\")\n    else:\n        return None\n\nurl = \"https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/MyStackName\"\nprint(extract_stack_name(url))\n",
+    "test_case": {
+      "task": "Create a regular expression that extracts an AWS CloudFormation stack name from a URL.",
+      "type": "regex"
+    },
+    "model_score": 9,
+    "model_reasoning": "The model's response correctly solves the task by using a regular expression to extract the stack name from the URL, and it stays focused on the specific ask without including unnecessary information.",
+    "syntax_score": 10,
+    "score": 9.5
+  }
+]
